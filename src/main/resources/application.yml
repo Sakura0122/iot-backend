@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: iot-backend
+  profiles:
+    active: dev
