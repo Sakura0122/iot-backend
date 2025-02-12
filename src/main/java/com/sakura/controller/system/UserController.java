@@ -1,0 +1,70 @@
+package com.sakura.controller.system;
+
+import cn.hutool.core.bean.BeanUtil;
+import com.sakura.common.PageVo;
+import com.sakura.common.Result;
+import com.sakura.model.dto.system.user.SysUserAddDto;
+import com.sakura.model.dto.system.user.SysUserListDto;
+import com.sakura.model.dto.system.user.SysUserUpdateDto;
+import com.sakura.model.po.system.SysUser;
+import com.sakura.model.vo.system.SysUserVo;
+import com.sakura.service.system.SysUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+
+/**
+ * @author: sakura
+ * @date: 2025/2/11 16:02
+ * @description:
+ */
+@RestController
+@RequestMapping("/sys-user")
+@Tag(name = "用户管理")
+@Validated
+public class UserController {
+
+    @Resource
+    private SysUserService userService;
+
+    @GetMapping("/list")
+    @Operation(summary = "分页查询用户列表")
+    public Result<PageVo<SysUserVo>> list(SysUserListDto userDto) {
+        PageVo<SysUserVo> list = userService.getUserList(userDto);
+        return Result.success(list);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "查询用户详细信息")
+    public Result<SysUserVo> getUserDetailById(@PathVariable String id) {
+        SysUser sysUser = userService.getById(id);
+        SysUserVo sysUserVo = BeanUtil.copyProperties(sysUser, SysUserVo.class);
+        return Result.success(sysUserVo);
+    }
+
+    @PostMapping
+    @Operation(summary = "新增用户")
+    public Result<Void> addUser(@Validated @RequestBody SysUserAddDto userDto) {
+        userService.addUser(userDto);
+        return Result.success();
+    }
+
+    @PutMapping
+    @Operation(summary = "修改用户")
+    public Result<Void> updateUser(@Validated @RequestBody SysUserUpdateDto userDto) {
+        userService.updateUser(userDto);
+        return Result.success();
+    }
+
+    @DeleteMapping("/{ids}")
+    @Operation(summary = "删除用户")
+    public Result<Void> deleteUser(@PathVariable String ids) {
+        userService.removeByIds(Arrays.asList(ids.split(",")));
+        return Result.success();
+    }
+
+}

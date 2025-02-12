@@ -14,13 +14,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class Knife4jConfig {
-    @Bean
-    public GroupedOpenApi adminApi() {      // 创建了一个api接口的分组
-        return GroupedOpenApi.builder()
-                .group("admin-api")         // 分组名称
-                .pathsToMatch("/admin/**")  // 接口请求路径规则
-                .build();
-    }
 
     /***
      * @description 自定义接口信息
@@ -30,9 +23,17 @@ public class Knife4jConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("后台管理系统API接口文档")
+                        .title("iot系统API接口文档")
                         .version("1.0")
-                        .description("后台管理系统API接口文档")
+                        .description("iot系统API接口文档")
                         .contact(new Contact().name("sakura"))); // 设定作者
+    }
+
+    @Bean
+    public GroupedOpenApi adminApi() {      // 创建了一个api接口的分组
+        return GroupedOpenApi.builder()
+                .group("系统管理")         // 分组名称
+                .pathsToMatch("/system/**")  // 接口请求路径规则
+                .build();
     }
 }

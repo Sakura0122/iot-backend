@@ -22,6 +22,7 @@ public enum ResultCodeEnum {
     ACCOUNT_STOP( 216, "账号已停用"),
     NODE_ERROR( 217, "该节点下有子节点，不可以删除"),
     VALIDATECODE_ERROR(218 , "验证码错误"),
+    NONE_FILE(220, "请选择文件"),
     ;
 
     private Integer code;      // 业务状态码

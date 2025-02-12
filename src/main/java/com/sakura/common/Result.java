@@ -28,6 +28,10 @@ public class Result<T> {
         return build(body, 200, "success");
     }
 
+    public static <T> Result<T> success() {
+        return build(null, 200, "success");
+    }
+
     public static <T> Result<T> error(int code, String message) {
         return build(null, code, message);
     }
