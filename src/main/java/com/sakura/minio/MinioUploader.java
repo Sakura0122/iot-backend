@@ -21,21 +21,6 @@ public class MinioUploader {
     @Resource
     private MinioClient minioClient;
 
-    @Bean
-    public MinioClient minioClient() throws Exception {
-        MinioClient minioClient = MinioClient.builder()
-                .endpoint(minioProperties.getEndpointUrl())
-                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
-                .build();
-        boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucketName()).build());
-        if (!found) {
-            minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioProperties.getBucketName()).build());
-        } else {
-            System.out.println("桶" + minioProperties.getBucketName() + "已存在");
-        }
-        return minioClient;
-    }
-
     public String uploadFile(MultipartFile file) throws Exception {
         String prefix = UUID.randomUUID().toString().replaceAll("-", "");
         String fileName = prefix + file.getOriginalFilename();

@@ -3,9 +3,11 @@ package com.sakura.service.system;
 import com.sakura.common.PageVo;
 import com.sakura.model.dto.system.user.SysUserAddDto;
 import com.sakura.model.dto.system.user.SysUserListDto;
+import com.sakura.model.dto.system.user.SysUserRoleDTO;
 import com.sakura.model.dto.system.user.SysUserUpdateDto;
 import com.sakura.model.po.system.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sakura.model.vo.system.SysUserRoleVo;
 import com.sakura.model.vo.system.SysUserVo;
 
 /**
@@ -34,4 +36,17 @@ public interface SysUserService extends IService<SysUser> {
      * @param userDto 用户信息
      */
     void updateUser(SysUserUpdateDto userDto);
+
+    /**
+     * 查询用户角色
+     * @param userId 用户ID
+     * @return 用户角色
+     */
+    SysUserRoleVo getUserRole(String userId);
+
+    /**
+     * 修改用户角色
+     * @param userRoleDTO 用户角色信息
+     */
+    void updateUserRole(SysUserRoleDTO userRoleDTO);
 }

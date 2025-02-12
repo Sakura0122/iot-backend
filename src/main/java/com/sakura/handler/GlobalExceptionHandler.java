@@ -1,8 +1,12 @@
 package com.sakura.handler;
 
 import com.sakura.common.Result;
+import com.sakura.common.ResultCodeEnum;
 import com.sakura.exception.SakuraException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +32,11 @@ public class GlobalExceptionHandler {
         log.error("请求参数校验异常 -> {}", msg);
         log.debug("", e);
         return Result.error(400, msg);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Result<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        return Result.error(ResultCodeEnum.PARAM_ERROR);
     }
 
     @ExceptionHandler(SakuraException.class)

@@ -2,6 +2,7 @@ package com.sakura.model.dto.system.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -12,8 +13,8 @@ import lombok.Data;
 public class SysUserUpdateDto {
 
     @Schema(description = "id")
-    @NotBlank(message = "id不能为空")
-    private String id;
+    @NotNull(message = "id不能为空")
+    private Long id;
 
     @Schema(description = "用户名")
     @NotBlank(message = "用户名不能为空")

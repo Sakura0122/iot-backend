@@ -23,6 +23,7 @@ public enum ResultCodeEnum {
     NODE_ERROR( 217, "该节点下有子节点，不可以删除"),
     VALIDATECODE_ERROR(218 , "验证码错误"),
     NONE_FILE(220, "请选择文件"),
+    PARAM_ERROR(400, "入参错误"),
     ;
 
     private Integer code;      // 业务状态码

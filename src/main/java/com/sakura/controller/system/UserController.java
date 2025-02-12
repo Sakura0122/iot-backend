@@ -5,8 +5,10 @@ import com.sakura.common.PageVo;
 import com.sakura.common.Result;
 import com.sakura.model.dto.system.user.SysUserAddDto;
 import com.sakura.model.dto.system.user.SysUserListDto;
+import com.sakura.model.dto.system.user.SysUserRoleDTO;
 import com.sakura.model.dto.system.user.SysUserUpdateDto;
 import com.sakura.model.po.system.SysUser;
+import com.sakura.model.vo.system.SysUserRoleVo;
 import com.sakura.model.vo.system.SysUserVo;
 import com.sakura.service.system.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +25,7 @@ import java.util.Arrays;
  * @description:
  */
 @RestController
-@RequestMapping("/sys-user")
+@RequestMapping("/system/user")
 @Tag(name = "用户管理")
 @Validated
 public class UserController {
@@ -31,7 +33,7 @@ public class UserController {
     @Resource
     private SysUserService userService;
 
-    @GetMapping("/list")
+    @GetMapping
     @Operation(summary = "分页查询用户列表")
     public Result<PageVo<SysUserVo>> list(SysUserListDto userDto) {
         PageVo<SysUserVo> list = userService.getUserList(userDto);
@@ -64,6 +66,20 @@ public class UserController {
     @Operation(summary = "删除用户")
     public Result<Void> deleteUser(@PathVariable String ids) {
         userService.removeByIds(Arrays.asList(ids.split(",")));
+        return Result.success();
+    }
+
+    @GetMapping("/role/{userId}")
+    @Operation(summary = "查询用户角色")
+    public Result<SysUserRoleVo> getUserRole(@PathVariable String userId) {
+        SysUserRoleVo sysUserRoleVo = userService.getUserRole(userId);
+        return Result.success(sysUserRoleVo);
+    }
+
+    @PutMapping("/role")
+    @Operation(summary = "修改用户角色")
+    public Result<Void> updateUserRole(@Validated @RequestBody SysUserRoleDTO userRoleDTO) {
+        userService.updateUserRole(userRoleDTO);
         return Result.success();
     }
 

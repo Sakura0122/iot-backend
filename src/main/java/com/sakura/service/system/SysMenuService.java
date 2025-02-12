@@ -1,7 +1,14 @@
 package com.sakura.service.system;
 
+import com.sakura.model.dto.system.menu.SysMenuAddDto;
+import com.sakura.model.dto.system.menu.SysMenuUpdateDto;
+import com.sakura.model.dto.system.user.SysUserAddDto;
+import com.sakura.model.dto.system.user.SysUserUpdateDto;
 import com.sakura.model.po.system.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sakura.model.vo.system.SysMenuVo;
+
+import java.util.List;
 
 /**
 * @author sakura
@@ -10,4 +17,21 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SysMenuService extends IService<SysMenu> {
 
+    /**
+     * 获取菜单列表
+     * @return 菜单列表
+     */
+    List<SysMenuVo> getMenuList();
+
+    /**
+     * 添加菜单
+     * @param menuAddDto 菜单添加对象
+     */
+    void addMenu(SysMenuAddDto menuAddDto);
+
+    /**
+     * 修改菜单
+     * @param menuUpdateDto 菜单修改对象
+     */
+    void updateMenu(SysMenuUpdateDto menuUpdateDto);
 }

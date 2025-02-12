@@ -5,6 +5,7 @@ import com.sakura.minio.MinioUploader;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,14 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
  * @description:
  */
 @RestController
-@RequestMapping("/sys-upload")
+@RequestMapping("/system/upload")
 @Tag(name = "文件上传")
 public class FileUploadController {
 
     @Resource
     private MinioUploader minioUploader;
 
-    @RequestMapping()
+    @PostMapping()
     @Schema(description = "文件上传")
     public Result<String> upload(MultipartFile multipartFile) throws Exception {
         return Result.success(minioUploader.uploadFile(multipartFile));
