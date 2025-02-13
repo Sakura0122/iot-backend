@@ -8,15 +8,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sakura.common.PageVo;
 import com.sakura.model.dto.system.role.SysRoleListDto;
 import com.sakura.model.dto.system.role.SysRoleMenuDTO;
-import com.sakura.model.po.system.SysMenu;
 import com.sakura.model.po.system.SysRole;
 import com.sakura.model.po.system.SysRoleMenu;
+import com.sakura.model.po.system.SysUserRole;
 import com.sakura.model.vo.system.SysMenuVo;
 import com.sakura.model.vo.system.SysRoleMenuVo;
 import com.sakura.model.vo.system.SysRoleVo;
-import com.sakura.service.system.SysMenuService;
-import com.sakura.service.system.SysRoleMenuService;
-import com.sakura.service.system.SysRoleService;
+import com.sakura.service.system.*;
 import com.sakura.mapper.system.SysRoleMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +32,9 @@ import java.util.List;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
     private final SysMenuService menuService;
+    private final SysUserRoleService userRoleService;
     private final SysRoleMenuService roleMenuService;
+    private final SysUserService userService;
 
     @Override
     public PageVo<SysRoleVo> getRoleList(SysRoleListDto roleListDto) {
@@ -89,6 +89,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }).toList();
 
             roleMenuService.saveBatch(list);
+        }
+
+        List<SysUserRole> userRoles = userRoleService.lambdaQuery()
+                .eq(SysUserRole::getRoleId, roleMenuDTO.getRoleId())
+                .list();
+        if (CollUtil.isNotEmpty(userRoles)) {
+            // 3.更新用户角色的缓存
+            userRoles.forEach(userRole -> {
+                Long userId = userRole.getUserId();
+                userService.updateUserPermissions(userId);
+            });
         }
     }
 }

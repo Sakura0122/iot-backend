@@ -1,5 +1,6 @@
 package com.sakura.controller.system;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import com.sakura.common.PageVo;
 import com.sakura.common.Result;
@@ -43,6 +44,7 @@ public class RoleController {
 
     @GetMapping
     @Operation(summary = "分页查询角色列表")
+    @SaCheckPermission("sysRole.list")
     public Result<PageVo<SysRoleVo>> list(SysRoleListDto roleListDto) {
         PageVo<SysRoleVo> list = roleService.getRoleList(roleListDto);
         return Result.success(list);
@@ -50,6 +52,7 @@ public class RoleController {
 
     @GetMapping("/{id}")
     @Operation(summary = "查询角色详细信息")
+    @SaCheckPermission("sysRole.detail")
     public Result<SysRoleVo> getUserDetailById(@PathVariable String id) {
         SysRole sysRole = roleService.getById(id);
         SysRoleVo sysRoleVo = BeanUtil.copyProperties(sysRole, SysRoleVo.class);
@@ -58,6 +61,7 @@ public class RoleController {
 
     @PostMapping
     @Operation(summary = "新增角色")
+    @SaCheckPermission("sysRole.add")
     public Result<Void> addUser(@Validated @RequestBody SysRoleAddDto roleAddDto) {
         roleService.save(BeanUtil.copyProperties(roleAddDto, SysRole.class));
         return Result.success();
@@ -65,6 +69,7 @@ public class RoleController {
 
     @PutMapping
     @Operation(summary = "修改角色")
+    @SaCheckPermission("sysRole.update")
     public Result<Void> updateRole(@Validated @RequestBody SysRoleUpdateDto roleUpdateDto) {
         roleService.updateById(BeanUtil.copyProperties(roleUpdateDto, SysRole.class));
         return Result.success();
@@ -72,6 +77,7 @@ public class RoleController {
 
     @DeleteMapping("/{ids}")
     @Operation(summary = "删除角色")
+    @SaCheckPermission("sysRole.delete")
     public Result<Void> deleteUser(@PathVariable String ids) {
         roleService.removeByIds(Arrays.asList(ids.split(",")));
         return Result.success();
@@ -86,6 +92,7 @@ public class RoleController {
 
     @PutMapping("/menu")
     @Operation(summary = "修改角色菜单")
+    @SaCheckPermission("sysRole.assignMenu")
     public Result<Void> updateUserRole(@Validated @RequestBody SysRoleMenuDTO roleMenuDTO) {
         roleService.updateRoleMenu(roleMenuDTO);
         return Result.success();

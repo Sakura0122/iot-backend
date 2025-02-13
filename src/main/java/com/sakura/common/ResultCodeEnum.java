@@ -10,7 +10,7 @@ public enum ResultCodeEnum {
     DATA_ERROR(204, "数据异常"),
     ILLEGAL_REQUEST(205, "非法请求"),
     REPEAT_SUBMIT(206, "重复提交"),
-    LOGIN_AUTH(208, "未登陆"),
+    LOGIN_AUTH(208, "未登录"),
     PERMISSION(209, "没有权限"),
     ARGUMENT_VALID_ERROR(210, "参数校验异常"),
 

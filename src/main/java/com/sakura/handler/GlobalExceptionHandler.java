@@ -1,5 +1,8 @@
 package com.sakura.handler;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
 import com.sakura.common.Result;
 import com.sakura.common.ResultCodeEnum;
 import com.sakura.exception.SakuraException;
@@ -34,6 +37,31 @@ public class GlobalExceptionHandler {
         return Result.error(400, msg);
     }
 
+    /**
+     * 未登录异常拦截
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(NotLoginException.class)
+    @ResponseBody
+    public Result notLogin(Exception e) {
+        log.error("发生未登录异常,内容为:{}", e.getMessage());
+        return Result.error(ResultCodeEnum.LOGIN_AUTH);
+    }
+
+    /**
+     * 访问权限异常拦截
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler({NotPermissionException.class, NotRoleException.class})
+    public Result notPermissionException(Exception e) {
+        log.error("发生访问异常,内容为:{}", e.getMessage());
+        return Result.error(ResultCodeEnum.PERMISSION);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return Result.error(ResultCodeEnum.PARAM_ERROR);
@@ -43,7 +71,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Object handleSakuraException(SakuraException e) {
         log.error("自定义异常 -> {}", e.getResultCodeEnum().getMessage());
-        return Result.error(e.getResultCodeEnum()) ;
+        return Result.error(e.getResultCodeEnum());
     }
 
     // @ExceptionHandler(Exception.class)
