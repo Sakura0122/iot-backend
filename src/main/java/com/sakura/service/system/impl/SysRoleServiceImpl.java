@@ -75,6 +75,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
+    @Transactional
     public void updateRoleMenu(SysRoleMenuDTO roleMenuDTO) {
         // 1.删除角色的菜单
         roleMenuService.lambdaUpdate()

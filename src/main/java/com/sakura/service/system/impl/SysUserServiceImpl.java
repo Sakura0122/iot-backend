@@ -29,6 +29,7 @@ import com.sakura.mapper.system.SysUserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -126,6 +127,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
+    @Transactional
     public void updateUserRole(SysUserRoleDTO userRoleDTO) {
         // 0.更新用户权限
         this.updateUserPermissions(userRoleDTO.getUserId());
@@ -231,6 +233,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         redisTemplate.delete(RedisConstant.ROLE_CACHE_PREFIX + userId.toString());
     }
 
+    /**
+     * 更新用户权限
+     * @param userIds 用户ids
+     */
     public void updateUserPermissions(List<Long> userIds) {
         // 生成所有待删除的 Redis 键
         Set<String> keys = userIds.stream()
