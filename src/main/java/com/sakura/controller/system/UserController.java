@@ -48,7 +48,7 @@ public class UserController {
     @GetMapping("/{id}")
     @Operation(summary = "用户详情")
     @SaCheckPermission("sysUser.detail")
-    public Result<SysUserVo> getUserDetailById(@PathVariable String id) {
+    public Result<SysUserVo> getUserDetailById(@PathVariable Long id) {
         SysUser sysUser = userService.getById(id);
         SysUserVo sysUserVo = BeanUtil.copyProperties(sysUser, SysUserVo.class);
         return Result.success(sysUserVo);

@@ -13,10 +13,7 @@ import lombok.EqualsAndHashCode;
 @Schema(description = "角色搜索对象")
 public class SysRoleListDto extends PageDto {
 
-    @Schema(description = "角色名称")
-    private String roleName;
-
-    @Schema(description = "角色编码")
-    private String roleCode;
+    @Schema(description = "角色名称或编码")
+    private String keyword;
 
 }

@@ -53,7 +53,7 @@ public class RoleController {
     @GetMapping("/{id}")
     @Operation(summary = "查询角色详细信息")
     @SaCheckPermission("sysRole.detail")
-    public Result<SysRoleVo> getUserDetailById(@PathVariable String id) {
+    public Result<SysRoleVo> getUserDetailById(@PathVariable Long id) {
         SysRole sysRole = roleService.getById(id);
         SysRoleVo sysRoleVo = BeanUtil.copyProperties(sysRole, SysRoleVo.class);
         return Result.success(sysRoleVo);
@@ -85,7 +85,7 @@ public class RoleController {
 
     @GetMapping("/menu/{roleId}")
     @Operation(summary = "查询角色菜单")
-    public Result<SysRoleMenuVo> getRoleMenu(@PathVariable String roleId) {
+    public Result<SysRoleMenuVo> getRoleMenu(@PathVariable Long roleId) {
         SysRoleMenuVo sysRoleMenuVo = roleService.getRoleMenu(roleId);
         return Result.success(sysRoleMenuVo);
     }

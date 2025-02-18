@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String createCaptcha(String key) {
         // 1.生成验证码
-        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(115, 42, 0, 20);
+        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(100, 40, 0, 20);
         // 1.1 设置四则运算的验证码生成器 并且指定参与运算的数字位数为1
         lineCaptcha.setGenerator(new MathGenerator(1));
         // 1.2 获取生成验证码的值

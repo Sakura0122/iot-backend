@@ -43,8 +43,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 2.查询
         Page<SysRole> page = lambdaQuery()
-                .like(StrUtil.isNotBlank(roleListDto.getRoleName()), SysRole::getRoleName, roleListDto.getRoleName())
-                .like(StrUtil.isNotBlank(roleListDto.getRoleCode()), SysRole::getRoleCode, roleListDto.getRoleCode())
+                .like(StrUtil.isNotBlank(roleListDto.getKeyword()), SysRole::getRoleName, roleListDto.getKeyword())
+                .or()
+                .like(StrUtil.isNotBlank(roleListDto.getKeyword()), SysRole::getRoleCode, roleListDto.getKeyword())
                 .page(p);
 
         // 3.返回
@@ -52,7 +53,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public SysRoleMenuVo getRoleMenu(String roleId) {
+    public SysRoleMenuVo getRoleMenu(Long roleId) {
         // 1.查询全部菜单
         List<SysMenuVo> menuList = menuService.getMenuList();
 

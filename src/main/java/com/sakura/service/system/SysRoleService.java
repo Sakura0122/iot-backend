@@ -27,7 +27,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @param roleId 角色id
      * @return 菜单信息
      */
-    SysRoleMenuVo getRoleMenu(String roleId);
+    SysRoleMenuVo getRoleMenu(Long roleId);
 
     /**
      * 更新角色菜单信息

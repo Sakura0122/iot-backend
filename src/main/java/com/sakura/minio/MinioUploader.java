@@ -1,5 +1,7 @@
 package com.sakura.minio;
 
+import com.sakura.common.ResultCodeEnum;
+import com.sakura.exception.SakuraException;
 import io.minio.*;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,9 @@ public class MinioUploader {
     private MinioClient minioClient;
 
     public String uploadFile(MultipartFile file) throws Exception {
+        if (file == null || file.isEmpty()) {
+            throw new SakuraException(ResultCodeEnum.NONE_FILE);
+        }
         String prefix = UUID.randomUUID().toString().replaceAll("-", "");
         String fileName = prefix + file.getOriginalFilename();
 

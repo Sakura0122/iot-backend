@@ -54,7 +54,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 2.查询
         Page<SysUser> page = lambdaQuery()
-                .eq(SysUser::getStatus, 1)
                 .between(StrUtil.isNotBlank(userDto.getBeginTime()) && StrUtil.isNotBlank(userDto.getEndTime()),
                         SysUser::getCreateTime, userDto.getBeginTime(), userDto.getEndTime())
                 .and(StrUtil.isNotBlank(userDto.getKeyword()), wrapper -> wrapper
