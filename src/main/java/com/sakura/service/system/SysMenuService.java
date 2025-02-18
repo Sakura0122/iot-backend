@@ -24,14 +24,7 @@ public interface SysMenuService extends IService<SysMenu> {
     List<SysMenuVo> getMenuList();
 
     /**
-     * 添加菜单
-     * @param menuAddDto 菜单添加对象
+     * 删除菜单缓存
      */
-    void addMenu(SysMenuAddDto menuAddDto);
-
-    /**
-     * 修改菜单
-     * @param menuUpdateDto 菜单修改对象
-     */
-    void updateMenu(SysMenuUpdateDto menuUpdateDto);
+    void deleteMenuCache();
 }

@@ -2,6 +2,7 @@ package com.sakura.service.system.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sakura.constant.RedisConstant;
 import com.sakura.model.dto.system.menu.SysMenuAddDto;
 import com.sakura.model.dto.system.menu.SysMenuUpdateDto;
 import com.sakura.model.po.system.SysMenu;
@@ -9,6 +10,8 @@ import com.sakura.model.po.system.SysUser;
 import com.sakura.model.vo.system.SysMenuVo;
 import com.sakura.service.system.SysMenuService;
 import com.sakura.mapper.system.SysMenuMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +23,10 @@ import java.util.List;
  * @createDate 2025-02-11 17:32:51
  */
 @Service
+@RequiredArgsConstructor
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
+
+    private final StringRedisTemplate redisTemplate;
 
     @Override
     public List<SysMenuVo> getMenuList() {
@@ -40,13 +46,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public void addMenu(SysMenuAddDto menuAddDto) {
-
-    }
-
-    @Override
-    public void updateMenu(SysMenuUpdateDto menuUpdateDto) {
-
+    public void deleteMenuCache() {
+        redisTemplate.delete(RedisConstant.MENU_CACHE_PREFIX + "*");
+        redisTemplate.delete(RedisConstant.PERMISSION_CACHE_PREFIX + "*");
     }
 
     /**

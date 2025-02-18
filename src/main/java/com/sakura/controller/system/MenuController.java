@@ -3,6 +3,8 @@ package com.sakura.controller.system;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.bean.BeanUtil;
 import com.sakura.common.Result;
+import com.sakura.common.ResultCodeEnum;
+import com.sakura.exception.SakuraException;
 import com.sakura.model.dto.system.menu.SysMenuAddDto;
 import com.sakura.model.dto.system.menu.SysMenuUpdateDto;
 import com.sakura.model.po.system.SysMenu;
@@ -58,16 +60,26 @@ public class MenuController {
     @Operation(summary = "修改菜单")
     @SaCheckPermission("sysMenu.update")
     public Result<Void> updateMenu(@Validated @RequestBody SysMenuUpdateDto menuUpdateDto) {
-        menuService.updateById(BeanUtil.copyProperties(menuUpdateDto, SysMenu.class));
-        return Result.success();
+        boolean result = menuService.updateById(BeanUtil.copyProperties(menuUpdateDto, SysMenu.class));
+        if (result) {
+            menuService.deleteMenuCache();
+            return Result.success();
+        } else {
+            throw new SakuraException(ResultCodeEnum.FAIL);
+        }
     }
 
     @DeleteMapping("/{ids}")
     @Operation(summary = "删除菜单")
     @SaCheckPermission("sysMenu.delete")
     public Result<Void> deleteUser(@PathVariable String ids) {
-        menuService.removeByIds(Arrays.asList(ids.split(",")));
-        return Result.success();
+        boolean result = menuService.removeByIds(Arrays.asList(ids.split(",")));
+        if (result) {
+            menuService.deleteMenuCache();
+            return Result.success();
+        } else {
+            throw new SakuraException(ResultCodeEnum.FAIL);
+        }
     }
 
 }

@@ -230,6 +230,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     public void updateUserPermissions(Long userId) {
         redisTemplate.delete(RedisConstant.PERMISSION_CACHE_PREFIX + userId.toString());
+        redisTemplate.delete(RedisConstant.MENU_CACHE_PREFIX + userId.toString());
         redisTemplate.delete(RedisConstant.ROLE_CACHE_PREFIX + userId.toString());
     }
 
@@ -242,6 +243,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Set<String> keys = userIds.stream()
                 .flatMap(userId -> Stream.of(
                         RedisConstant.PERMISSION_CACHE_PREFIX + userId.toString(),
+                        RedisConstant.MENU_CACHE_PREFIX + userId.toString(),
                         RedisConstant.ROLE_CACHE_PREFIX + userId.toString()
                 ))
                 .collect(Collectors.toSet());
