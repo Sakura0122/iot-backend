@@ -26,8 +26,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public List<SysMenuVo> getMenuList() {
         // 1.获取所有菜单
         List<SysMenu> list = lambdaQuery()
-                .eq(SysMenu::getStatus, 1)
-                .orderByAsc(SysMenu::getCreateTime)
+                .orderByAsc(SysMenu::getSortValue)
                 .list();
 
         // 2.遍历所有菜单，构造菜单树
