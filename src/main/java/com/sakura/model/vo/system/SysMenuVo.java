@@ -34,7 +34,7 @@ public class SysMenuVo {
     private String perms;
 
     @Schema(description = "排序")
-    private Long sortValue;
+    private Integer sortValue;
 
     @Schema(description = "状态(0:禁止,1:正常)")
     private Integer status;

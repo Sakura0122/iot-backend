@@ -35,14 +35,14 @@ public class MenuController {
 
     @GetMapping
     @Operation(summary = "列表查询")
-    @SaCheckPermission("sysMenu.list")
+    @SaCheckPermission("sys.menu.query")
     public Result<List<SysMenuVo>> list() {
         return Result.success(menuService.getMenuList());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "根据id查询菜单信息")
-    @SaCheckPermission("sysMenu.detail")
+    @SaCheckPermission("sys.menu.detail")
     public Result<SysMenuVo> getMenuDetailById(@PathVariable String id) {
         SysMenu sysMenu = menuService.getById(id);
         return Result.success(BeanUtil.copyProperties(sysMenu, SysMenuVo.class));
@@ -50,7 +50,7 @@ public class MenuController {
 
     @PostMapping
     @Operation(summary = "新增菜单")
-    @SaCheckPermission("sysMenu.add")
+    @SaCheckPermission("sys.menu.add")
     public Result<Void> addMenu(@Validated @RequestBody SysMenuAddDto menuAddDto) {
         menuService.save(BeanUtil.copyProperties(menuAddDto, SysMenu.class));
         return Result.success();
@@ -58,7 +58,7 @@ public class MenuController {
 
     @PutMapping
     @Operation(summary = "修改菜单")
-    @SaCheckPermission("sysMenu.update")
+    @SaCheckPermission("sys.menu.update")
     public Result<Void> updateMenu(@Validated @RequestBody SysMenuUpdateDto menuUpdateDto) {
         boolean result = menuService.updateById(BeanUtil.copyProperties(menuUpdateDto, SysMenu.class));
         if (result) {
@@ -71,7 +71,7 @@ public class MenuController {
 
     @DeleteMapping("/{ids}")
     @Operation(summary = "删除菜单")
-    @SaCheckPermission("sysMenu.delete")
+    @SaCheckPermission("sys.menu.delete")
     public Result<Void> deleteUser(@PathVariable String ids) {
         boolean result = menuService.removeByIds(Arrays.asList(ids.split(",")));
         if (result) {

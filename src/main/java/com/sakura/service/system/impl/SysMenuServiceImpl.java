@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author sakura
@@ -47,8 +48,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public void deleteMenuCache() {
-        redisTemplate.delete(RedisConstant.MENU_CACHE_PREFIX + "*");
-        redisTemplate.delete(RedisConstant.PERMISSION_CACHE_PREFIX + "*");
+        Set<String> menuKeys = redisTemplate.keys(RedisConstant.MENU_CACHE_PREFIX + "*");
+        Set<String> permissionKeys = redisTemplate.keys(RedisConstant.PERMISSION_CACHE_PREFIX + "*");
+        if (!menuKeys.isEmpty()) {
+            redisTemplate.delete(menuKeys);
+        }
+        if (!permissionKeys.isEmpty()) {
+            redisTemplate.delete(permissionKeys);
+        }
     }
 
     /**

@@ -39,7 +39,7 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "分页查询用户列表")
-    @SaCheckPermission("sysUser.list")
+    @SaCheckPermission("sys.user.query")
     public Result<PageVo<SysUserVo>> list(SysUserListDto userDto) {
         PageVo<SysUserVo> list = userService.getUserList(userDto);
         return Result.success(list);
@@ -47,7 +47,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @Operation(summary = "用户详情")
-    @SaCheckPermission("sysUser.detail")
+    @SaCheckPermission("sys.user.detail")
     public Result<SysUserVo> getUserDetailById(@PathVariable Long id) {
         SysUser sysUser = userService.getById(id);
         SysUserVo sysUserVo = BeanUtil.copyProperties(sysUser, SysUserVo.class);
@@ -64,7 +64,7 @@ public class UserController {
 
     @PostMapping
     @Operation(summary = "新增用户")
-    @SaCheckPermission("sysUser.add")
+    @SaCheckPermission("sys.user.add")
     public Result<Void> addUser(@Validated @RequestBody SysUserAddDto userDto) {
         userService.addUser(userDto);
         return Result.success();
@@ -72,7 +72,7 @@ public class UserController {
 
     @PutMapping
     @Operation(summary = "修改用户")
-    @SaCheckPermission("sysUser.update")
+    @SaCheckPermission("sys.user.update")
     public Result<Void> updateUser(@Validated @RequestBody SysUserUpdateDto userDto) {
         userService.updateUser(userDto);
         return Result.success();
@@ -80,7 +80,7 @@ public class UserController {
 
     @DeleteMapping("/{ids}")
     @Operation(summary = "删除用户")
-    @SaCheckPermission("sysUser.delete")
+    @SaCheckPermission("sys.user.delete")
     public Result<Void> deleteUser(@PathVariable String ids) {
         userService.removeByIds(Arrays.asList(ids.split(",")));
         return Result.success();
@@ -95,7 +95,7 @@ public class UserController {
 
     @PutMapping("/role")
     @Operation(summary = "修改用户角色")
-    @SaCheckPermission("sysUser.assignRole")
+    @SaCheckPermission("sys.user.set_role")
     public Result<Void> updateUserRole(@Validated @RequestBody SysUserRoleDTO userRoleDTO) {
         userService.updateUserRole(userRoleDTO);
         return Result.success();
