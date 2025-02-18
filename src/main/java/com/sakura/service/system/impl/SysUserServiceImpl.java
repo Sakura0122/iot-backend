@@ -31,8 +31,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author sakura
@@ -225,5 +229,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void updateUserPermissions(Long userId) {
         redisTemplate.delete(RedisConstant.PERMISSION_CACHE_PREFIX + userId.toString());
         redisTemplate.delete(RedisConstant.ROLE_CACHE_PREFIX + userId.toString());
+    }
+
+    public void updateUserPermissions(List<Long> userIds) {
+        // 生成所有待删除的 Redis 键
+        Set<String> keys = userIds.stream()
+                .flatMap(userId -> Stream.of(
+                        RedisConstant.PERMISSION_CACHE_PREFIX + userId.toString(),
+                        RedisConstant.ROLE_CACHE_PREFIX + userId.toString()
+                ))
+                .collect(Collectors.toSet());
+
+        // 批量删除
+        if (!keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
     }
 }

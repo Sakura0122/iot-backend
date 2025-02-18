@@ -67,6 +67,12 @@ public interface SysUserService extends IService<SysUser> {
     void updateUserPermissions(Long userId);
 
     /**
+     * 更新redis中用户权限
+     * @param userIds 用户ids
+     */
+    void updateUserPermissions(List<Long> userIds);
+
+    /**
      * 根据用户ID查询用户权限
      * @param userId 用户id
      * @return 用户权限

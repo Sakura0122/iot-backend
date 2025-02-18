@@ -18,6 +18,7 @@ import com.sakura.service.system.*;
 import com.sakura.mapper.system.SysRoleMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,10 +98,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .list();
         if (CollUtil.isNotEmpty(userRoles)) {
             // 3.更新用户角色的缓存
-            userRoles.forEach(userRole -> {
-                Long userId = userRole.getUserId();
-                userService.updateUserPermissions(userId);
-            });
+            userService.updateUserPermissions(userRoles.stream().map(SysUserRole::getUserId).toList());
+            // userRoles.forEach(userRole -> {
+            //     Long userId = userRole.getUserId();
+            //     userService.updateUserPermissions(userId);
+            // });
         }
     }
 }
