@@ -18,9 +18,11 @@ import com.sakura.service.system.SysUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -99,6 +101,13 @@ public class UserController {
     public Result<Void> updateUserRole(@Validated @RequestBody SysUserRoleDTO userRoleDTO) {
         userService.updateUserRole(userRoleDTO);
         return Result.success();
+    }
+
+    @GetMapping("/export")
+    @Operation(summary = "导出用户列表")
+    @SaCheckPermission("sys.user.export")
+    public void exportUserList(HttpServletResponse response) throws IOException {
+        userService.exportUserList(response);
     }
 
 }

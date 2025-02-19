@@ -22,7 +22,7 @@ public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         Long userId = Long.valueOf(loginId.toString());
-        return userService.getPermissionList(userId);
+        return userService.getButtonsList(userId);
     }
 
     /**

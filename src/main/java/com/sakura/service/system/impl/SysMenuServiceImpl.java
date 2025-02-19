@@ -49,7 +49,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public void deleteMenuCache() {
         Set<String> menuKeys = redisTemplate.keys(RedisConstant.MENU_CACHE_PREFIX + "*");
-        Set<String> permissionKeys = redisTemplate.keys(RedisConstant.PERMISSION_CACHE_PREFIX + "*");
+        Set<String> permissionKeys = redisTemplate.keys(RedisConstant.BUTTON_CACHE_PREFIX + "*");
         if (!menuKeys.isEmpty()) {
             redisTemplate.delete(menuKeys);
         }

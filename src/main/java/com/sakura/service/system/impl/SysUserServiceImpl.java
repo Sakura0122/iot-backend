@@ -6,6 +6,7 @@ import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import cn.hutool.json.JSONUtil;
+import cn.idev.excel.FastExcel;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sakura.common.PageVo;
@@ -20,19 +21,24 @@ import com.sakura.model.dto.system.user.SysUserUpdateDto;
 import com.sakura.model.po.system.SysRole;
 import com.sakura.model.po.system.SysUser;
 import com.sakura.model.po.system.SysUserRole;
+import com.sakura.model.vo.system.SysUserExcelVo;
 import com.sakura.model.vo.system.SysUserRoleVo;
 import com.sakura.model.vo.system.SysUserVo;
 import com.sakura.model.vo.system.UserInfoVo;
 import com.sakura.service.system.SysUserRoleService;
 import com.sakura.service.system.SysUserService;
 import com.sakura.mapper.system.SysUserMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -158,14 +164,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .one();
 
         // 2.查询权限
-        List<String> permissionList = this.getPermissionList(userId);
+        List<String> buttonList = this.getButtonsList(userId);
         List<String> menuList = this.getMenuList(userId);
         List<String> roleList = this.getRoleList(userId);
 
         // 3.返回
         UserInfoVo userInfoVo = BeanUtil.copyProperties(sysUser, UserInfoVo.class);
         userInfoVo.setRoles(roleList);
-        userInfoVo.setPermissions(permissionList);
+        userInfoVo.setButtons(buttonList);
         userInfoVo.setMenus(menuList);
         return userInfoVo;
     }
@@ -176,8 +182,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param userId 用户id
      * @return 用户权限数组
      */
-    public List<String> getPermissionList(Long userId) {
-        String key = RedisConstant.PERMISSION_CACHE_PREFIX + userId.toString();
+    public List<String> getButtonsList(Long userId) {
+        String key = RedisConstant.BUTTON_CACHE_PREFIX + userId.toString();
         List<String> userPermissionCode = JSONUtil.toBean(redisTemplate.opsForValue().get(key), new TypeReference<>() {
                 },
                 false);
@@ -224,25 +230,46 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return userRoleCode;
     }
 
+    @Override
+    public void exportUserList(HttpServletResponse response) throws IOException {
+        List<SysUserExcelVo> userExcelVoList = lambdaQuery()
+                .list()
+                .stream()
+                .map(sysUser -> BeanUtil.copyProperties(sysUser, SysUserExcelVo.class))
+                .toList();
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        String fileName = URLEncoder.encode("用户列表", StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        response.addHeader("Access-Control-Expose-Headers", "Content-disposition");
+
+        FastExcel.write(response.getOutputStream(), SysUserExcelVo.class)
+                .sheet("用户数据")
+                .doWrite(userExcelVoList);
+    }
+
     /**
      * 更新用户权限
+     *
      * @param userId 用户id
      */
     public void updateUserPermissions(Long userId) {
-        redisTemplate.delete(RedisConstant.PERMISSION_CACHE_PREFIX + userId.toString());
+        redisTemplate.delete(RedisConstant.BUTTON_CACHE_PREFIX + userId.toString());
         redisTemplate.delete(RedisConstant.MENU_CACHE_PREFIX + userId.toString());
         redisTemplate.delete(RedisConstant.ROLE_CACHE_PREFIX + userId.toString());
     }
 
     /**
      * 更新用户权限
+     *
      * @param userIds 用户ids
      */
     public void updateUserPermissions(List<Long> userIds) {
         // 生成所有待删除的 Redis 键
         Set<String> keys = userIds.stream()
                 .flatMap(userId -> Stream.of(
-                        RedisConstant.PERMISSION_CACHE_PREFIX + userId.toString(),
+                        RedisConstant.BUTTON_CACHE_PREFIX + userId.toString(),
                         RedisConstant.MENU_CACHE_PREFIX + userId.toString(),
                         RedisConstant.ROLE_CACHE_PREFIX + userId.toString()
                 ))

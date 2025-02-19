@@ -31,5 +31,5 @@ public class UserInfoVo {
     private List<String> menus;
 
     @Schema(description = "权限")
-    private List<String> permissions;
+    private List<String> buttons;
 }

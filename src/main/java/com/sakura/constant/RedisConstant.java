@@ -15,7 +15,7 @@ public interface RedisConstant {
     int CAPTCHA_REDIS_PREFIX_TIMEOUT = 60;
 
     // 角色权限
-    String PERMISSION_CACHE_PREFIX = "user:permission:";
+    String BUTTON_CACHE_PREFIX = "user:permission:";
     String MENU_CACHE_PREFIX = "user:menu:";
     String ROLE_CACHE_PREFIX = "user:role:";
 }

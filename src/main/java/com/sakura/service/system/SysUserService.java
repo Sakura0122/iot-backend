@@ -10,7 +10,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sakura.model.vo.system.SysUserRoleVo;
 import com.sakura.model.vo.system.SysUserVo;
 import com.sakura.model.vo.system.UserInfoVo;
+import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -77,7 +80,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param userId 用户id
      * @return 用户权限
      */
-    List<String> getPermissionList(Long userId);
+    List<String> getButtonsList(Long userId);
 
     /**
      * 根据用户ID查询用户菜单
@@ -92,4 +95,10 @@ public interface SysUserService extends IService<SysUser> {
      * @return 用户角色
      */
     List<String> getRoleList(Long userId);
+
+    /**
+     * 导出用户列表
+     * @param response 响应
+     */
+    void exportUserList(HttpServletResponse response) throws IOException;
 }

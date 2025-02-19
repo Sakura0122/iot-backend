@@ -69,7 +69,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // 3.返回
         SysRoleMenuVo sysRoleMenuVo = new SysRoleMenuVo();
-        sysRoleMenuVo.setMenuList(menuList);
+        sysRoleMenuVo.setMenuList(BeanUtil.copyToList(menuList, SysRoleMenuVo.menuList.class));
         sysRoleMenuVo.setSelectIds(selectIds);
         return sysRoleMenuVo;
     }
